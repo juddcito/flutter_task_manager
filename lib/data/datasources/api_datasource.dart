@@ -36,6 +36,7 @@ class ApiDatasource extends TasksDatasource {
     
   }
   
+  // Método GET para obtener el listado de tasks
   @override
   Future<List<Task>> getTasks() async {
     try {
@@ -47,6 +48,7 @@ class ApiDatasource extends TasksDatasource {
     }
   }
 
+  // Método GET para obtener una task por su ID
   @override
   Future<List<Task>> getTasksById(int id) async {
     try {
