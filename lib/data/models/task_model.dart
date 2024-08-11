@@ -7,7 +7,7 @@ class TaskModel {
   final String? date;
   final String? comments;
   final String? description;
-  final List<String>? tag;
+  final List<String>? tags;
 
   TaskModel({
     required this.id,
@@ -15,7 +15,7 @@ class TaskModel {
     this.date,
     this.comments,
     this.description,
-    this.tag,
+    this.tags,
   });
 
   // fromJson para crear un TaskModel a partir de un JSON
@@ -23,10 +23,10 @@ class TaskModel {
     return TaskModel(
       id: json['id'],
       title: json['title'],
-      date: json['date'],
-      comments: json['comments'],
-      description: json['description'],
-      tag: json['tag'] != null ? List<String>.from(json['tags']) : null,
+      date: json['date'] ?? "",
+      comments: json['comments'] ?? "",
+      description: json['description'] ?? "",
+      tags: json['tag'] != null ? List<String>.from(json['tags']) : [],
     );
   }
 
@@ -38,7 +38,7 @@ class TaskModel {
       'date': date,
       'comments': comments,
       'description': description,
-      'tag': tag,
+      'tags': tags,
     };
   }
 }
