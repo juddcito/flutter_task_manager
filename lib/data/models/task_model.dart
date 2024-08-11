@@ -2,16 +2,18 @@
 
 class TaskModel {
 
-  final int id;
+  final int? id;
   final String title;
+  final int isCompleted;
   final String? date;
   final String? comments;
   final String? description;
   final List<String>? tags;
 
   TaskModel({
-    required this.id,
+    this.id,
     required this.title,
+    required this.isCompleted,
     this.date,
     this.comments,
     this.description,
@@ -23,6 +25,7 @@ class TaskModel {
     return TaskModel(
       id: json['id'],
       title: json['title'],
+      isCompleted: int.parse(json['is_completed']),
       date: json['date'] ?? "",
       comments: json['comments'] ?? "",
       description: json['description'] ?? "",
@@ -35,6 +38,7 @@ class TaskModel {
     return {
       'id': id,
       'title': title,
+      'is_completed': isCompleted,
       'date': date,
       'comments': comments,
       'description': description,

@@ -6,8 +6,9 @@ class TaskMapper {
   // Método estático para mapear de TaskModel a Task
   static Task toEntity(TaskModel model) {
     return Task(
-      id: model.id,
+      id: model.id ?? 0,
       title: model.title,
+      isCompleted: model.isCompleted,
       date: model.date ?? '',
       comments: model.comments ?? '',
       description: model.description ?? '',
@@ -18,8 +19,9 @@ class TaskMapper {
   // Método estático para mapear de Task a TaskModel (si es necesario)
   static TaskModel toModel(Task entity) {
     return TaskModel(
-      id: entity.id,
+      id: entity.id ?? 0,
       title: entity.title,
+      isCompleted: entity.isCompleted,
       date: entity.date ?? '',
       comments: entity.comments ?? '',
       description: entity.description ?? '',
