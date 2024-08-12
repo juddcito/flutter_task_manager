@@ -10,6 +10,7 @@ class CustomTextfield extends StatelessWidget {
   final IconData? icon;
   final int? minLines;
   final int? maxLines;
+  final String? Function(String?)? validator;
 
   const CustomTextfield({
     super.key,
@@ -18,14 +19,17 @@ class CustomTextfield extends StatelessWidget {
     required this.controller,
     this.icon,
     this.minLines,
-    this.maxLines = 1
+    this.maxLines = 1,
+    this.validator
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 10, bottom: 15),
-      child: TextField(
+      child: TextFormField(
+        validator: validator,        
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         minLines: minLines,
         maxLines:  maxLines,
         controller: controller,

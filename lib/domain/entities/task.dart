@@ -8,7 +8,7 @@ class Task {
   String? date;
   String? comments;
   String? description;
-  List<String>? tags;
+  String? tags;
 
   Task({
     this.id,

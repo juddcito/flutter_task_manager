@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_task_manager/domain/entities/task.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 class TaskTile extends StatelessWidget {
 
@@ -15,6 +16,10 @@ class TaskTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
+    final date = task.date != null ? DateTime.parse(task.date!) : null;
+    final formatedDate = date != null ? DateFormat('MMMM d, y').format(date) : 'No date';
+
     return Card(
       child: ListTile(
         onTap: () => context.push('/task-details/${task.id}'),
@@ -27,13 +32,14 @@ class TaskTile extends StatelessWidget {
             },
           ),
         ),
+        trailing: const Icon(Icons.arrow_forward_ios_rounded),
         title: Text(
           task.title,
           style: TextStyle(
             decoration: task.isCompleted == 1 ? TextDecoration.lineThrough : TextDecoration.none
           ),
         ),
-        subtitle: Text(task.date ?? 'No date'),
+        subtitle: Text(formatedDate),
       ),
     );
   }

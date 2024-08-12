@@ -12,7 +12,7 @@ class TaskMapper {
       date: model.date ?? '',
       comments: model.comments ?? '',
       description: model.description ?? '',
-      tags: model.tags ?? [],
+      tags: model.tags ?? '',
     );
   }
 
@@ -25,7 +25,7 @@ class TaskMapper {
       date: entity.date ?? '',
       comments: entity.comments ?? '',
       description: entity.description ?? '',
-      tags: entity.tags ?? [],
+      tags: entity.tags ?? '',
     );
   }
 }

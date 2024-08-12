@@ -8,7 +8,7 @@ class TaskModel {
   final String? date;
   final String? comments;
   final String? description;
-  final List<String>? tags;
+  final String? tags;
 
   TaskModel({
     this.id,
@@ -25,11 +25,11 @@ class TaskModel {
     return TaskModel(
       id: json['id'],
       title: json['title'],
-      isCompleted: int.parse(json['is_completed']),
-      date: json['date'] ?? "",
+      isCompleted: json['is_completed'],
+      date: json['due_date'] ?? "",
       comments: json['comments'] ?? "",
       description: json['description'] ?? "",
-      tags: json['tag'] != null ? List<String>.from(json['tags']) : [],
+      tags: json['tags'] ?? '',
     );
   }
 

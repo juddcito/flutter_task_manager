@@ -1,9 +1,13 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_task_manager/presentation/providers/task_providers.dart';
+import 'package:flutter_task_manager/presentation/widgets/custom_datepicker.dart';
+import 'package:flutter_task_manager/presentation/widgets/custom_textfield.dart';
 import 'package:go_router/go_router.dart';
 
-class TaskDetailsScreen extends StatelessWidget {
+class TaskDetailsScreen extends ConsumerStatefulWidget {
 
   final int taskId;
 
@@ -13,7 +17,58 @@ class TaskDetailsScreen extends StatelessWidget {
   });
 
   @override
+  TaskDetailsScreenState createState() => TaskDetailsScreenState();
+}
+
+class TaskDetailsScreenState extends ConsumerState<TaskDetailsScreen> {
+
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController commentsController  = TextEditingController();
+  final TextEditingController descriptionController  = TextEditingController();
+  final TextEditingController tagsController  = TextEditingController();
+  DateTime? selectedDate;
+  bool isCompleted = false;
+
+  @override
+  void initState() {
+    super.initState();
+    initializeTaskInfo();
+  }
+
+  Future<void> initializeTaskInfo() async {
+
+    final task = await ref.read(getTaskByIdProvider(widget.taskId).future);
+
+    setState(() {
+      titleController.text = task.title;
+      commentsController.text = task.comments!;
+      descriptionController.text = task.description!;     
+      tagsController.text = task.tags!;
+      selectedDate = DateTime.parse(task.date!); 
+      isCompleted = task.isCompleted == 1;
+    });   
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    commentsController.dispose();
+    descriptionController.dispose();
+    tagsController.dispose();
+    super.dispose();
+  }
+
+  void changeDate(DateTime date) {
+    setState(() {
+      selectedDate = date;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+
+    final taskAsyncValue = ref.watch(getTaskByIdProvider(widget.taskId));
+
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -32,6 +87,82 @@ class TaskDetailsScreen extends StatelessWidget {
           )
         ],
       ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: taskAsyncValue.when(
+          data: (task) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+
+                // title controller
+                const Text('Title', style: TextStyle(fontWeight: FontWeight.bold)),
+                CustomTextfield(
+                  hintText: 'Add a title',
+                  controller: titleController,
+                  icon: Icons.title,
+                  validator: (title) {
+                    if (title == null || title.isEmpty) {
+                      return 'Title can not be null';
+                    }
+                    return null;
+                  } ,
+                ),
+
+                // description controller
+                const Text('Description', style: TextStyle(fontWeight: FontWeight.bold)),
+                CustomTextfield(
+                  controller: descriptionController,
+                  icon: Icons.description,
+                  minLines: 3,
+                  maxLines: 5,
+                ),
+            
+                const Text('Date', style: TextStyle(fontWeight: FontWeight.bold)),
+                CustomDateTimePicker(
+                  selectedDate: selectedDate,
+                  onDateSelected: changeDate,
+                ),
+            
+                // comments controller
+                const Text('Comments', style: TextStyle(fontWeight: FontWeight.bold)),
+                CustomTextfield(
+                  controller: commentsController,
+                  icon: Icons.comment,
+                ),
+            
+                // tags controller
+                const Text('Tags', style: TextStyle(fontWeight: FontWeight.bold)),
+                CustomTextfield(
+                  controller: tagsController,
+                  icon: Icons.tag,
+                ),
+
+                Row(
+                  children: [
+                    Switch(
+                      value: isCompleted,
+                      onChanged:(value) {
+                        setState(() {
+                          isCompleted = value;
+                        });
+                      },
+                    ),
+                    const Text('Completed')
+                  ],
+                ), 
+                
+              ],
+            );            
+          },
+          error: (error, stackTrace) => Center(
+            child: Text(
+              'Error ocurred getting task: $error'
+            ),
+          ),
+          loading:() => const Center(child: CircularProgressIndicator()),
+        ),
+      )
     );
   }
 }

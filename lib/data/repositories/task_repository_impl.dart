@@ -16,8 +16,23 @@ class TaskRepositoryImpl extends TasksRepository {
   }
 
   @override
-  Future<List<Task>> getTasksById(int id) {
-    return datasource.getTasksById(id);
+  Future<Task> getTaskById(int id) {
+    return datasource.getTaskById(id);
+  }
+  
+  @override
+  Future<void> addTask(Task task) {
+    return datasource.addTask(task);
+  }
+  
+  @override
+  Future<void> deleteTask(Task task) {
+    return datasource.deleteTask(task);
+  }
+  
+  @override
+  Future<void> updateTask(Task task) {
+    return datasource.updateTask(task);
   }
 
 

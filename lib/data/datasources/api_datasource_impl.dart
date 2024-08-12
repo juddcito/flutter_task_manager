@@ -10,12 +10,12 @@ class ApiDatasource extends TasksDatasource {
   
   final dio = Dio(
     BaseOptions(
-      baseUrl: '> https://ecsdevapi.nextline.mx/vdev/tasks-challenge',
+      baseUrl: 'https://ecsdevapi.nextline.mx/vdev/tasks-challenge',
       headers: {
         'Authorization': 'Bearer e864a0c9eda63181d7d65bc73e61e3dc6b74ef9b82f7049f1fc7d9fc8f29706025bd271d1ee1822b15d654a84e1a0997b973a46f923cc9977b3fcbb064179ecd'
       },
       queryParameters: {
-        'token': 'tasksUser1'
+        'token': 'taskUser2'
       }
       
     ),
@@ -50,20 +50,56 @@ class ApiDatasource extends TasksDatasource {
 
   // Método GET para obtener una task por su ID
   @override
-  Future<List<Task>> getTasksById(int id) async {
+  Future<Task> getTaskById(int id) async {
     try {
       final response = await dio.get(
-        '/tasks/task_id',
-        queryParameters: {
-          'task_id': id
-        }
+        '/tasks/$id',
       );
-      final task = jsonToTasks(response.data);
-      return task;
+      final tasks = jsonToTasks(response.data);
+      return tasks.first;
     } catch (e) {
       throw Exception('Failed getting tasks: $e');
     }
   }
+  
+  @override
+  Future<void> addTask(Task task) async {
+    try {
+      final response = await dio.post(
+        '/tasks',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        ),
+        queryParameters: {
+          'title': task.title,
+          'is_completed': task.isCompleted,
+          'due_date': task.date,
+          'comments': task.comments,
+          'description': task.description,
+          'tags': task.tags
+        },
+      );     
+      
+    } catch (e) {
+      throw Exception('Failed posting task: $e');
+    }
+  }
+  
+  @override
+  Future<void> deleteTask(Task task) async {
+    // TODO: implement deleteTask
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> updateTask(Task task) async {
+    // TODO: implement updateTask
+    throw UnimplementedError();
+  }
+
+  // Método POST para añadir una nueva task
 
 
 }
