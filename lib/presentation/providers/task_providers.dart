@@ -38,7 +38,7 @@ class Tasks extends _$Tasks {
 
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 Future<Task> getTaskById(GetTaskByIdRef ref, int id) async {
   final apiDatasource = ref.watch(apiDatasourceProvider);
   final task = await apiDatasource.getTaskById(id);

@@ -32,6 +32,19 @@ class ApiDatasource extends TasksDatasource {
       .map((taskModel) => TaskMapper.toEntity(taskModel))
       .toList();
 
+    // Ordenar las tareas por fecha
+    tasks.sort((a, b) {
+      if (a.date == null && b.date == null) {
+        return 0; // Ambas tareas no tienen fecha, se consideran iguales
+      } else if (a.date == null) {
+        return -1; // a va después de b
+      } else if (b.date == null) {
+        return 1; // a va antes de b
+      } else {
+        // Ambas tareas tienen fecha, comparamos las fechas
+        return DateTime.parse(a.date!).compareTo(DateTime.parse(b.date!));
+      }
+    });
     return tasks;    
     
   }
@@ -62,6 +75,7 @@ class ApiDatasource extends TasksDatasource {
     }
   }
   
+  // Método POST para crear una nueva tarea
   @override
   Future<void> addTask(Task task) async {
 
@@ -76,7 +90,7 @@ class ApiDatasource extends TasksDatasource {
       if (task.description != null && task.description!.isNotEmpty) queryParams['description'] = task.description;
       if (task.tags != null && task.tags!.isNotEmpty) queryParams['tags'] = task.tags;
 
-      final response = await dio.post(
+      await dio.post(
         '/tasks',
         options: Options(
           headers: {
@@ -85,17 +99,16 @@ class ApiDatasource extends TasksDatasource {
         ),
         queryParameters: queryParams
       );     
-      print(response.data);
-
     } catch (e) {
       throw Exception('Failed posting task: $e');
     }
   }
   
+  // Método DELETE para borrar una tarea
   @override
   Future<void> deleteTask(int id) async {
     try {
-      final response = await dio.delete(
+      await dio.delete(
         '/tasks/$id',
       );    
     } catch (e) {
@@ -103,6 +116,7 @@ class ApiDatasource extends TasksDatasource {
     }
   }
   
+  // Método PUT para editar una tarea
   @override
   Future<void> updateTask(Task task) async {
     try {
@@ -121,12 +135,12 @@ class ApiDatasource extends TasksDatasource {
         queryParameters: queryParams
       );
 
+      print(response.data);
+
     } catch (e) {
       throw Exception('Failed updating task: $e');
     }
   }
-
-  // Método POST para añadir una nueva task
 
 
 }

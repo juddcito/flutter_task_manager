@@ -96,7 +96,7 @@ class TaskCreateScreenState extends ConsumerState<TaskCreateScreen> {
                   icon: Icons.title,
                   validator: (title) {
                     if (title == null || title.isEmpty) {
-                      return 'Title can not be null';
+                      return 'Title cannot be null';
                     }
                     return null;
                   } ,
@@ -129,6 +129,16 @@ class TaskCreateScreenState extends ConsumerState<TaskCreateScreen> {
                 CustomTextfield(
                   controller: tagsController,
                   icon: Icons.tag,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return null; // No se muestra ningún error si el campo está vacío
+                    }
+                    final regex = RegExp(r'^[a-zA-Z]+(?:\s*,\s*[a-zA-Z]+)*$');
+                    if (!regex.hasMatch(value)) {
+                      return 'Only words separated by commas are allowed';
+                    }
+                    return null;
+                  },
                 ),
                   
                 Row(
@@ -153,8 +163,10 @@ class TaskCreateScreenState extends ConsumerState<TaskCreateScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          _formKey.currentState!.validate() == true ? await addTask() : null;
-          if (context.mounted) context.pop();
+          if (_formKey.currentState!.validate() == true) {
+            await addTask();
+            if (context.mounted) context.pop();
+          }           
         },
         child: const Icon(Icons.check),
       ),

@@ -18,7 +18,7 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Tasks'),
+        title: const Text('Tasks'),
         forceMaterialTransparency: true,
         actions: [
           IconButton(

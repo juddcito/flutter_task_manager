@@ -43,7 +43,12 @@ class TaskTile extends ConsumerWidget {
             decoration: task.isCompleted == 1 ? TextDecoration.lineThrough : TextDecoration.none
           ),
         ),
-        subtitle: Text(date != null ? DateFormat('MMMM d, y').format(date) : 'No due date'),
+        subtitle: Text(
+          date != null ? DateFormat('MMMM d, y').format(date) : 'No due date',
+          style: TextStyle(
+            decoration: task.isCompleted == 1 ? TextDecoration.lineThrough : TextDecoration.none
+          ),
+        ),
       ),
     );
   }

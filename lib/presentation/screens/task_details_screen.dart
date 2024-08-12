@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_task_manager/domain/entities/task.dart';
 import 'package:flutter_task_manager/presentation/providers/task_providers.dart';
 import 'package:flutter_task_manager/presentation/widgets/custom_datepicker.dart';
 import 'package:flutter_task_manager/presentation/widgets/custom_textfield.dart';
@@ -73,6 +74,32 @@ class TaskDetailsScreenState extends ConsumerState<TaskDetailsScreen> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
+  Future<bool?> showDeleteConfirmationDialog(BuildContext context) {
+    return showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm'),
+          content: const Text('Are you sure you want to delete this task?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false); // Cierra el diálogo y retorna false
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true); // Cierra el diálogo y retorna true
+              },
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -84,14 +111,29 @@ class TaskDetailsScreenState extends ConsumerState<TaskDetailsScreen> {
           IconButton(
             icon: Icon(Icons.delete, color: Colors.red[200]),
             onPressed: () async {
-              await ref.read(tasksProvider.notifier).deleteTask(widget.taskId);
-              showSnackbar('Task deleted!');
-              if (context.mounted) context.pop();
+              final bool? willBeDeleted = await showDeleteConfirmationDialog(context);
+              if (willBeDeleted == true) {
+                await ref.read(tasksProvider.notifier).deleteTask(widget.taskId);
+                showSnackbar('Task deleted!');
+                if (context.mounted) context.pop();
+              }             
             },
           ),
           TextButton(
-            onPressed: () {
-              context.pop();
+            onPressed: () async {
+              await ref.read(tasksProvider.notifier).updateTask(
+                Task(
+                  id: widget.taskId,
+                  title: titleController.text,
+                  isCompleted: isCompleted ? 1 : 0,
+                  date: selectedDate.toString().substring(0, 10),         
+                  comments: commentsController.text,
+                  description: descriptionController.text,
+                  tags: tagsController.text
+                )
+              );
+              showSnackbar('Task updated!');
+               if (context.mounted) context.pop();
             },
             child: const Text('Save')
           )
@@ -99,7 +141,7 @@ class TaskDetailsScreenState extends ConsumerState<TaskDetailsScreen> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(15.0),
           child: taskAsyncValue.when(
             data: (task) {
               return Column(
@@ -154,6 +196,8 @@ class TaskDetailsScreenState extends ConsumerState<TaskDetailsScreen> {
         
                   Row(
                     children: [
+                      const Text('Mark as completed'),
+                      const Spacer(),
                       Switch(
                         value: isCompleted,
                         onChanged:(value) {
@@ -162,7 +206,6 @@ class TaskDetailsScreenState extends ConsumerState<TaskDetailsScreen> {
                           });
                         },
                       ),
-                      const Text('Completed')
                     ],
                   ), 
                   
