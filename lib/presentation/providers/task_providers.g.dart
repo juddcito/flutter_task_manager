@@ -155,7 +155,7 @@ class _GetTaskByIdProviderElement extends AutoDisposeFutureProviderElement<Task>
   int get id => (origin as GetTaskByIdProvider).id;
 }
 
-String _$tasksHash() => r'af2579fdc5637be384174ffeea72bf944d2b790f';
+String _$tasksHash() => r'005ee0472439c77904cd25aa7e967a6538aff7a8';
 
 /// See also [Tasks].
 @ProviderFor(Tasks)

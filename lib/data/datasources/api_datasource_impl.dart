@@ -88,9 +88,14 @@ class ApiDatasource extends TasksDatasource {
   }
   
   @override
-  Future<void> deleteTask(Task task) async {
-    // TODO: implement deleteTask
-    throw UnimplementedError();
+  Future<void> deleteTask(int id) async {
+    try {
+      final response = await dio.delete(
+        '/tasks/$id',
+      );    
+    } catch (e) {
+      throw Exception('Failed deleting task: $e');
+    }
   }
   
   @override

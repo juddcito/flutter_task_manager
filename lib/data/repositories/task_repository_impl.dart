@@ -26,8 +26,8 @@ class TaskRepositoryImpl extends TasksRepository {
   }
   
   @override
-  Future<void> deleteTask(Task task) {
-    return datasource.deleteTask(task);
+  Future<void> deleteTask(int id) {
+    return datasource.deleteTask(id);
   }
   
   @override

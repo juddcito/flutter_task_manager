@@ -64,6 +64,15 @@ class TaskDetailsScreenState extends ConsumerState<TaskDetailsScreen> {
     });
   }
 
+  void showSnackbar(String message) {
+    final snackBar = SnackBar(
+      content: Text(message),
+      duration: const Duration(seconds: 2),
+      backgroundColor: Colors.green[400],
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -73,7 +82,11 @@ class TaskDetailsScreenState extends ConsumerState<TaskDetailsScreen> {
       appBar: AppBar(
         actions: [
           TextButton(
-            onPressed: () {},
+            onPressed: () async {
+              await ref.read(tasksProvider.notifier).deleteTask(widget.taskId);
+              showSnackbar('Task deleted!');
+              if (context.mounted) context.pop();
+            },
             child: Text(
               'Delete',
               style: TextStyle(color: Colors.red[200]),
