@@ -41,9 +41,9 @@ class TaskDetailsScreenState extends ConsumerState<TaskDetailsScreen> {
 
     setState(() {
       titleController.text = task.title;
-      commentsController.text = task.comments ?? 'No comments';
-      descriptionController.text = task.description ?? 'No description';     
-      tagsController.text = task.tags ?? 'No tags';
+      commentsController.text = task.comments ?? '';
+      descriptionController.text = task.description ?? '';     
+      tagsController.text = task.tags ?? '';
       selectedDate = (task.date != null && task.date!.isNotEmpty) ? DateTime.parse(task.date!) : null;
       isCompleted = task.isCompleted == 1;
     });   
@@ -97,80 +97,85 @@ class TaskDetailsScreenState extends ConsumerState<TaskDetailsScreen> {
           )
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: taskAsyncValue.when(
-          data: (task) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-
-                // title controller
-                const Text('Title', style: TextStyle(fontWeight: FontWeight.bold)),
-                CustomTextfield(
-                  hintText: 'Add a title',
-                  controller: titleController,
-                  icon: Icons.title,
-                  validator: (title) {
-                    if (title == null || title.isEmpty) {
-                      return 'Title can not be null';
-                    }
-                    return null;
-                  } ,
-                ),
-
-                // description controller
-                const Text('Description', style: TextStyle(fontWeight: FontWeight.bold)),
-                CustomTextfield(
-                  controller: descriptionController,
-                  icon: Icons.description,
-                  minLines: 3,
-                  maxLines: 5,
-                ),
-            
-                const Text('Date', style: TextStyle(fontWeight: FontWeight.bold)),
-                CustomDateTimePicker(
-                  selectedDate: selectedDate,
-                  onDateSelected: changeDate,
-                ),
-            
-                // comments controller
-                const Text('Comments', style: TextStyle(fontWeight: FontWeight.bold)),
-                CustomTextfield(
-                  controller: commentsController,
-                  icon: Icons.comment,
-                ),
-            
-                // tags controller
-                const Text('Tags', style: TextStyle(fontWeight: FontWeight.bold)),
-                CustomTextfield(
-                  controller: tagsController,
-                  icon: Icons.tag,
-                ),
-
-                Row(
-                  children: [
-                    Switch(
-                      value: isCompleted,
-                      onChanged:(value) {
-                        setState(() {
-                          isCompleted = value;
-                        });
-                      },
-                    ),
-                    const Text('Completed')
-                  ],
-                ), 
-                
-              ],
-            );            
-          },
-          error: (error, stackTrace) => Center(
-            child: Text(
-              'Error ocurred getting task: $error'
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: taskAsyncValue.when(
+            data: (task) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+        
+                  // title controller
+                  const Text('Title', style: TextStyle(fontWeight: FontWeight.bold)),
+                  CustomTextfield(
+                    hintText: 'Add a title',
+                    controller: titleController,
+                    icon: Icons.title,
+                    validator: (title) {
+                      if (title == null || title.isEmpty) {
+                        return 'Title can not be null';
+                      }
+                      return null;
+                    } ,
+                  ),
+        
+                  // description controller
+                  const Text('Description', style: TextStyle(fontWeight: FontWeight.bold)),
+                  CustomTextfield(
+                    controller: descriptionController,
+                    hintText: 'No description',
+                    icon: Icons.description,
+                    minLines: 3,
+                    maxLines: 5,
+                  ),
+              
+                  const Text('Date', style: TextStyle(fontWeight: FontWeight.bold)),
+                  CustomDateTimePicker(
+                    selectedDate: selectedDate,
+                    onDateSelected: changeDate,
+                  ),
+              
+                  // comments controller
+                  const Text('Comments', style: TextStyle(fontWeight: FontWeight.bold)),
+                  CustomTextfield(
+                    controller: commentsController,
+                    hintText: 'No comments',
+                    icon: Icons.comment,
+                  ),
+              
+                  // tags controller
+                  const Text('Tags', style: TextStyle(fontWeight: FontWeight.bold)),
+                  CustomTextfield(
+                    hintText: 'No tags',
+                    controller: tagsController,
+                    icon: Icons.tag,
+                  ),
+        
+                  Row(
+                    children: [
+                      Switch(
+                        value: isCompleted,
+                        onChanged:(value) {
+                          setState(() {
+                            isCompleted = value;
+                          });
+                        },
+                      ),
+                      const Text('Completed')
+                    ],
+                  ), 
+                  
+                ],
+              );            
+            },
+            error: (error, stackTrace) => Center(
+              child: Text(
+                'Error ocurred getting task: $error'
+              ),
             ),
+            loading:() => const Center(child: CircularProgressIndicator()),
           ),
-          loading:() => const Center(child: CircularProgressIndicator()),
         ),
       )
     );

@@ -29,6 +29,13 @@ class Tasks extends _$Tasks {
     await future;
   }
 
+  Future<void> updateTask(Task task) async {
+    final apiDatasource = ref.watch(apiDatasourceProvider);
+    await apiDatasource.updateTask(task);
+    ref.invalidateSelf();
+    await future;
+  }
+
 }
 
 @riverpod

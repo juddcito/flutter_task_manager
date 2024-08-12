@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_task_manager/config/router/app_router.dart';
 import 'package:flutter_task_manager/domain/entities/task.dart';
 import 'package:flutter_task_manager/presentation/providers/task_providers.dart';
 import 'package:flutter_task_manager/presentation/widgets/custom_datepicker.dart';
@@ -134,6 +133,8 @@ class TaskCreateScreenState extends ConsumerState<TaskCreateScreen> {
                   
                 Row(
                   children: [
+                    const Text('Mark as completed'),
+                    const Spacer(),
                     Switch(
                       value: isCompleted,
                       onChanged:(value) {
@@ -141,8 +142,7 @@ class TaskCreateScreenState extends ConsumerState<TaskCreateScreen> {
                           isCompleted = value;
                         });
                       },
-                    ),
-                    const Text('Completed')
+                    ),                    
                   ],
                 ),             
             

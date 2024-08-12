@@ -37,6 +37,7 @@ class CustomDateTimePicker extends StatelessWidget {
             filled: true,
             labelText: label,
             border: const OutlineInputBorder(),
+            hintText: 'No due date'
           ),
           child: Row(
             children: [
@@ -44,6 +45,7 @@ class CustomDateTimePicker extends StatelessWidget {
               const SizedBox(width: 10),
               Text(
                 selectedDate != null ? DateFormat('d MMMM yyyy').format(selectedDate!) : 'No date selected',
+                style: const TextStyle(fontSize: 16),
               ),              
             ],
           ),

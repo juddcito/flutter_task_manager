@@ -1,11 +1,13 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_task_manager/domain/entities/task.dart';
+import 'package:flutter_task_manager/presentation/providers/task_providers.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-class TaskTile extends StatelessWidget {
+class TaskTile extends ConsumerWidget {
 
   final Task task;
 
@@ -15,7 +17,7 @@ class TaskTile extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     
     final date = task.date != null ? DateTime.parse(task.date!) : null;
 
@@ -27,7 +29,10 @@ class TaskTile extends StatelessWidget {
           child: Checkbox(
             value: (task.isCompleted == 1),
             onChanged:(value) {
-              
+              if (value != null) {
+                task.isCompleted = (value == true) ? 1 : 0;
+                ref.read(tasksProvider.notifier).updateTask(task);
+              }
             },
           ),
         ),

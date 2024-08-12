@@ -64,6 +64,7 @@ class ApiDatasource extends TasksDatasource {
   
   @override
   Future<void> addTask(Task task) async {
+
     try {
 
       Map<String, dynamic> queryParams = {};
@@ -85,6 +86,7 @@ class ApiDatasource extends TasksDatasource {
         queryParameters: queryParams
       );     
       print(response.data);
+
     } catch (e) {
       throw Exception('Failed posting task: $e');
     }
@@ -103,8 +105,25 @@ class ApiDatasource extends TasksDatasource {
   
   @override
   Future<void> updateTask(Task task) async {
-    // TODO: implement updateTask
-    throw UnimplementedError();
+    try {
+
+      Map<String, dynamic> queryParams = {};
+
+      queryParams['title'] = task.title;
+      queryParams['is_completed'] = task.isCompleted;
+      if (task.date != null) queryParams['due_date'] = task.date; // Convertir DateTime a string
+      if (task.comments != null && task.comments!.isNotEmpty) queryParams['comments'] = task.comments;
+      if (task.description != null && task.description!.isNotEmpty) queryParams['description'] = task.description;
+      if (task.tags != null && task.tags!.isNotEmpty) queryParams['tags'] = task.tags;
+
+      final response = await dio.put(
+        '/tasks/${task.id}',
+        queryParameters: queryParams
+      );
+
+    } catch (e) {
+      throw Exception('Failed updating task: $e');
+    }
   }
 
   // Método POST para añadir una nueva task
