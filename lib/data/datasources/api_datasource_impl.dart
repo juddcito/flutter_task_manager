@@ -6,6 +6,7 @@ import 'package:flutter_task_manager/data/models/task_model.dart';
 import 'package:flutter_task_manager/domain/datasources/api_datasource.dart';
 import 'package:flutter_task_manager/domain/entities/task.dart';
 
+// Clase que implementa los métodos de TasksDatasource
 class ApiDatasource extends TasksDatasource {
   
   final dio = Dio(
@@ -130,12 +131,10 @@ class ApiDatasource extends TasksDatasource {
       if (task.description != null && task.description!.isNotEmpty) queryParams['description'] = task.description;
       if (task.tags != null && task.tags!.isNotEmpty) queryParams['tags'] = task.tags;
 
-      final response = await dio.put(
+      await dio.put(
         '/tasks/${task.id}',
         queryParameters: queryParams
       );
-
-      print(response.data);
 
     } catch (e) {
       throw Exception('Failed updating task: $e');

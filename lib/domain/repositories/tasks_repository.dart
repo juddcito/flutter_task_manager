@@ -1,7 +1,7 @@
 
 
 import 'package:flutter_task_manager/domain/entities/task.dart';
-
+// Clase abstracta para declarar los métodos CRUD que implementará el Datasource
 abstract class TasksRepository {
 
   Future<List<Task>> getTasks();

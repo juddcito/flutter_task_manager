@@ -126,7 +126,7 @@ class TaskDetailsScreenState extends ConsumerState<TaskDetailsScreen> {
                   id: widget.taskId,
                   title: titleController.text,
                   isCompleted: isCompleted ? 1 : 0,
-                  date: selectedDate.toString().substring(0, 10),         
+                  date: selectedDate?.toString().substring(0, 10),         
                   comments: commentsController.text,
                   description: descriptionController.text,
                   tags: tagsController.text
@@ -139,15 +139,15 @@ class TaskDetailsScreenState extends ConsumerState<TaskDetailsScreen> {
           )
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: taskAsyncValue.when(
-            data: (task) {
-              return Column(
+      body: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: taskAsyncValue.when(
+          data: (task) {
+            return SingleChildScrollView(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-        
+                    
                   // title controller
                   const Text('Title', style: TextStyle(fontWeight: FontWeight.bold)),
                   CustomTextfield(
@@ -161,7 +161,7 @@ class TaskDetailsScreenState extends ConsumerState<TaskDetailsScreen> {
                       return null;
                     } ,
                   ),
-        
+                    
                   // description controller
                   const Text('Description', style: TextStyle(fontWeight: FontWeight.bold)),
                   CustomTextfield(
@@ -193,7 +193,7 @@ class TaskDetailsScreenState extends ConsumerState<TaskDetailsScreen> {
                     controller: tagsController,
                     icon: Icons.tag,
                   ),
-        
+                    
                   Row(
                     children: [
                       const Text('Mark as completed'),
@@ -210,15 +210,15 @@ class TaskDetailsScreenState extends ConsumerState<TaskDetailsScreen> {
                   ), 
                   
                 ],
-              );            
-            },
-            error: (error, stackTrace) => Center(
-              child: Text(
-                'Error ocurred getting task: $error'
               ),
+            );            
+          },
+          error: (error, stackTrace) => Center(
+            child: Text(
+              'Error ocurred getting task: $error'
             ),
-            loading:() => const Center(child: CircularProgressIndicator()),
           ),
+          loading:() => const Center(child: CircularProgressIndicator()),
         ),
       )
     );
