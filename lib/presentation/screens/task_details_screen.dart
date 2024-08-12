@@ -41,10 +41,10 @@ class TaskDetailsScreenState extends ConsumerState<TaskDetailsScreen> {
 
     setState(() {
       titleController.text = task.title;
-      commentsController.text = task.comments!;
-      descriptionController.text = task.description!;     
-      tagsController.text = task.tags!;
-      selectedDate = DateTime.parse(task.date!); 
+      commentsController.text = task.comments ?? 'No comments';
+      descriptionController.text = task.description ?? 'No description';     
+      tagsController.text = task.tags ?? 'No tags';
+      selectedDate = (task.date != null && task.date!.isNotEmpty) ? DateTime.parse(task.date!) : null;
       isCompleted = task.isCompleted == 1;
     });   
   }
@@ -81,16 +81,13 @@ class TaskDetailsScreenState extends ConsumerState<TaskDetailsScreen> {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          TextButton(
+          IconButton(
+            icon: Icon(Icons.delete, color: Colors.red[200]),
             onPressed: () async {
               await ref.read(tasksProvider.notifier).deleteTask(widget.taskId);
               showSnackbar('Task deleted!');
               if (context.mounted) context.pop();
             },
-            child: Text(
-              'Delete',
-              style: TextStyle(color: Colors.red[200]),
-            )
           ),
           TextButton(
             onPressed: () {

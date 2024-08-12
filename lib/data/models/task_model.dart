@@ -26,10 +26,10 @@ class TaskModel {
       id: json['id'],
       title: json['title'],
       isCompleted: json['is_completed'],
-      date: json['due_date'] ?? "",
-      comments: json['comments'] ?? "",
-      description: json['description'] ?? "",
-      tags: json['tags'] ?? '',
+      date: json['due_date'],
+      comments: json['comments'],
+      description: json['description'],
+      tags: json['tags'],
     );
   }
 

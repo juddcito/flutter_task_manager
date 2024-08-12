@@ -18,7 +18,6 @@ class TaskTile extends StatelessWidget {
   Widget build(BuildContext context) {
     
     final date = task.date != null ? DateTime.parse(task.date!) : null;
-    final formatedDate = date != null ? DateFormat('MMMM d, y').format(date) : 'No date';
 
     return Card(
       child: ListTile(
@@ -39,7 +38,7 @@ class TaskTile extends StatelessWidget {
             decoration: task.isCompleted == 1 ? TextDecoration.lineThrough : TextDecoration.none
           ),
         ),
-        subtitle: Text(formatedDate),
+        subtitle: Text(date != null ? DateFormat('MMMM d, y').format(date) : 'No due date'),
       ),
     );
   }

@@ -1,10 +1,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_task_manager/config/router/app_router.dart';
 import 'package:flutter_task_manager/domain/entities/task.dart';
 import 'package:flutter_task_manager/presentation/providers/task_providers.dart';
 import 'package:flutter_task_manager/presentation/widgets/custom_datepicker.dart';
 import 'package:flutter_task_manager/presentation/widgets/custom_textfield.dart';
+import 'package:go_router/go_router.dart';
 
 final _formKey = GlobalKey<FormState>();
 
@@ -48,9 +50,14 @@ class TaskCreateScreenState extends ConsumerState<TaskCreateScreen> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  void addTask() {
+  Future<void> addTask() async {
 
-    final dueDate = selectedDate.toString().substring(0, 10);    
+    String? dueDate;
+
+    if (selectedDate != null) {
+      dueDate = selectedDate.toString().substring(0, 10);
+    }
+        
     final tagsList = tagsController.text.split(RegExp(r'\s*,\s*')).join(','); 
 
     final newTask = Task(
@@ -61,7 +68,8 @@ class TaskCreateScreenState extends ConsumerState<TaskCreateScreen> {
       description: descriptionController.text,
       tags: tagsList
     );
-    ref.read(tasksProvider.notifier).addTask(newTask);
+
+    await ref.read(tasksProvider.notifier).addTask(newTask);
     showSnackbar('Task added successfuly!');
 
   }
@@ -144,9 +152,9 @@ class TaskCreateScreenState extends ConsumerState<TaskCreateScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _formKey.currentState!.validate() == true ? addTask() : null;
-          //context.pop();
+        onPressed: () async {
+          _formKey.currentState!.validate() == true ? await addTask() : null;
+          if (context.mounted) context.pop();
         },
         child: const Icon(Icons.check),
       ),
