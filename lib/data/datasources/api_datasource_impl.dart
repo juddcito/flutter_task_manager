@@ -3,7 +3,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_task_manager/data/mappers/task_mapper.dart';
 import 'package:flutter_task_manager/data/models/task_model.dart';
-import 'package:flutter_task_manager/domain/datasources/tasks_datasource.dart';
+import 'package:flutter_task_manager/domain/datasources/api_datasource.dart';
 import 'package:flutter_task_manager/domain/entities/task.dart';
 
 class ApiDatasource extends TasksDatasource {

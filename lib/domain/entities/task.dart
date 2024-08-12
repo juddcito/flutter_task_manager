@@ -8,7 +8,7 @@ class Task {
   String? date;
   String? comments;
   String? description;
-  List<String>? tag;
+  List<String>? tags;
 
   Task({
     this.id,
@@ -17,7 +17,7 @@ class Task {
     this.date,
     this.comments,
     this.description,
-    this.tag
+    this.tags
   });  
 
 }

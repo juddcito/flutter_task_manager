@@ -13,8 +13,11 @@ final appRouter = GoRouter(
     ),
 
     GoRoute(
-      path: '/task-details',
-      builder: (context, state) => const TaskDetailsScreen(),
+      path: '/task-details/:taskId',
+      builder: (context, state) {
+        final taskId = state.pathParameters['taskId'];
+        return TaskDetailsScreen(taskId: int.parse(taskId!));
+      }
     ),
 
     GoRoute(
